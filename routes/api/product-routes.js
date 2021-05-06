@@ -28,8 +28,8 @@ router.get('/:id', async (req, res) => {
       // Add Book as a second model to JOIN with
       attributes: ['id', 'product_name', 'price', 'stock'],
       include: [{ model: Category, attributes: ['category_name']},
-    { model: Tag, attributes: ['tag_name' ]}
-    }),
+    { model: Tag, attributes: ['tag_name' ]}],
+    });
 
     if (!productData) {
       res.status(404).json({ message: 'No product found with that id!' });
