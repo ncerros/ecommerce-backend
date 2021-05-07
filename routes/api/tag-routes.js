@@ -7,10 +7,12 @@ router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   Tag.findAll({
-    include: {
+    include: [
+      {
       model: Product,
-      attributes: ['product_name', 'price', 'stock', 'category_id']
+      attributes: ['product_name', 'price', 'stock', 'category_id'],
     }
+  ]
   })
     .then(dbTagData => res.json(dbTagData))
     .catch(err => {
@@ -27,16 +29,24 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: {
+    include: [
+    {
       model: Product,
-      attributes: ['product_name', 'price', 'stock', 'category_id']
+      attributes: ['product_name', 'price', 'stock', 'category_id'],
     }
+   ]
   })
-    .then(dbTagData => res.json(dbTagData))
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+    .then(dbTagData => {
+    if (!dbTagData) {
+      res.status(400).json({ message: 'No tag was found with this id'});
+      return;
+    }
+    res.status(500).json(err);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 router.post('/', (req, res) => {
@@ -59,8 +69,8 @@ router.put('/:id', (req, res) => {
     }
   })
     .then(dbTagData => {
-      if (!dbTagData){
-        res.status(404).json({message:'No tag found with this id'});
+      if (!dbTagData[0]) {
+        res.status(404).json({message:'No tag was found with this id'});
         return;
       }
       res.json(dbTagData);
@@ -80,12 +90,12 @@ router.delete('/:id', (req, res) => {
   })
   .then(dbTagData => {
     if (!dbTagData) {
-      res.status(404).json({message: 'No tag found with this id'});
+      res.status(404).json({message: 'No tag was found with this id'});
       return;
     }
     res.json(dbTagData);
   })
-  .catch(err =>{
+  .catch(err => {
     console.log(err);
     res.status(500).json(err);
   });
