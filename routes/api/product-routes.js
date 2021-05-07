@@ -5,19 +5,9 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 
 // get all products
 router.get('/', (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
-  // try {
-  //   const productData = await Product.findAll({
-      
-  //     include: [{ model: Category, attributes: ['catergory_name'] },
-  //      { model: Tag, attributes: ['tag_name'] }],
-  //   });
-  //   res.status(200).json(productData);
-  // } catch (err) {
-  //   res.status(500).json(err);
-  // }
+  
   Product.findAll({
+    attributes: ['id', 'product_name', 'price', 'stock'],
     include: [
       {
         model: Category,
@@ -38,43 +28,26 @@ router.get('/', (req, res) => {
 
 // get one product
 router.get('/:id', (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
-  // try {
-  //   const productData = await Product.findOne(req.params.id, {
-  //     // Add Book as a second model to JOIN with
-  //     attributes: ['id', 'product_name', 'price', 'stock'],
-  //     include: [{ model: Category, attributes: ['category_name']},
-  //   { model: Tag, attributes: ['tag_name' ]}],
-  //   });
-
-  //   if (!productData) {
-  //     res.status(404).json({ message: 'No product found with that id!' });
-  //     return;
-  //   }
-
-  //   res.status(200).json(productData);
-  // } catch (err) {
-  //   res.status(500).json(err);
-  // }
+  
   Product.findOne({
     where: {
       id: req.params.id
     },
+    attributes: ['id', 'product_name', 'price', 'stock'],
     include: [
       {
         model: Category,
-        attributes: ['id', 'category_name']
+        attributes: ['category_name']
       },
       {
         model: Tag,
-        attributes: ['id', 'tag_name']
+        attributes: ['tag_name']
       }
     ]
   })
     .then(dbProductData => {
       if (!dbProductData) {
-        res.status(404).json({ message: 'No product found with this id'}); 
+        res.status(404).json({ message: 'No product was found with this id'}); 
         return; 
       }
       res.json(dbProductData);
@@ -168,7 +141,7 @@ router.delete('/:id', (req, res) => {
   })
     .then(dbProductData => {
         if (!dbProductData) {
-            res.status(404).json({ message: 'No product found with this id'});
+            res.status(404).json({ message: 'No product was found with this id'});
             return;
         }
         res.json(dbProductData);

@@ -7,12 +7,12 @@ router.get('/', (req, res) => {
   // find all tags
   // be sure to include its associated Product data
   Tag.findAll({
-    include: [
+    include: 
       {
       model: Product,
       attributes: ['product_name', 'price', 'stock', 'category_id'],
     }
-  ]
+  
   })
     .then(dbTagData => res.json(dbTagData))
     .catch(err => {
@@ -29,23 +29,17 @@ router.get('/:id', (req, res) => {
     where: {
       id: req.params.id
     },
-    include: [
-    {
+    include: {
       model: Product,
       attributes: ['product_name', 'price', 'stock', 'category_id'],
     }
-   ]
+   
   })
-    .then(dbTagData => {
-    if (!dbTagData) {
-      res.status(400).json({ message: 'No tag was found with this id'});
-      return;
-    }
-    res.status(500).json(err);
-  })
-  .catch(err => {
+    .then(dbTagData => res.json(dbTagData))
+    .catch(err => {
     console.log(err);
     res.status(500).json(err);
+  
   });
 });
 
@@ -69,7 +63,7 @@ router.put('/:id', (req, res) => {
     }
   })
     .then(dbTagData => {
-      if (!dbTagData[0]) {
+      if (!dbTagData){
         res.status(404).json({message:'No tag was found with this id'});
         return;
       }
