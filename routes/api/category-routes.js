@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
   })
     .then(dbCatData => {
       if(!dbCatData) {
-        res.status(404).json({message: 'No categories found'});
+        res.status(404).json({message: 'No categories was found'});
         return;
       }
       res.json(dbCatData);
@@ -43,7 +43,7 @@ router.get('/:id', (req, res) => {
   })
     .then(dbCatData => {
       if (!dbCatData) {
-        res.status(404).json({ message: 'No category found with this id'}); 
+        res.status(404).json({ message: 'No category was found with this id'}); 
         return; 
       }
       res.json(dbCatData);
@@ -63,7 +63,7 @@ router.put('/', (req, res) => {
   })
     .then(dbCatData => {
         if (!dbCatData[0]) {
-            res.status(404).json({ message: 'No category found with this id'});
+            res.status(404).json({ message: 'No category was found with this id'});
             return;
         }
         res.json(dbCatData);
@@ -95,7 +95,7 @@ router.delete('/:id', (req, res) => {
   })
     .then(dbCatData => {
         if (!dbCatData) {
-            res.status(404).json({ message: 'No category found with this id'});
+            res.status(404).json({ message: 'No category was found with this id'});
             return;
         }
         res.json(dbCatData);
